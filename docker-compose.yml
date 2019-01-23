@@ -1,0 +1,46 @@
+version: "3"
+services:
+  web:
+    build:
+        context: ./restful
+    image: restful-api
+    networks:
+       - frontend
+       - backend
+    ports:
+       - "3001:3001"
+    env_file: ./config.env
+   
+  grpc:
+    build:
+        context: ./grpc
+    image: grpc-api
+    networks:
+       - frontend
+       - backend
+    ports:
+       - "50051:50051"
+    env_file: ./config.env
+
+  db:
+    image: percona:5.7
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: test
+        MYSQL_USER: user-api
+        MYSQL_PASSWORD: whateveryoulike
+        MYSQL_DATABASE: userDB
+    ports:
+       - "5016:3306"
+    networks:
+       - backend
+    volumes:
+     - db-data:/var/lib/mysql/
+     - ./docker/mysql/conf.d:/etc/mysql/conf.d
+
+volumes:
+    db-data:
+networks:
+  backend:
+  frontend:
+

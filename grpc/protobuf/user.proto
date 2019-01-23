@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package userpb;
+
+import "google/protobuf/timestamp.proto";
+
+enum Gender {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+}
+
+message UserRequest {
+    int64 id = 1;
+}
+
+message UsersRequest {
+    repeated string name = 1;
+}
+
+message UserResponse {
+    int64 id = 1;
+    string name = 2;
+    Gender gender = 3;
+    google.protobuf.Timestamp birth = 4;
+}
+
+service User {
+    rpc GetUser(UserRequest) returns (UserResponse) {} ;
+    rpc GetUsers(UsersRequest) returns (stream UserResponse) {};
+}
