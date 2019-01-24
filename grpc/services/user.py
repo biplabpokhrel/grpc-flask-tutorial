@@ -6,7 +6,7 @@ from application.app import app
 from application.controllers.user import UserController
 import time
 from datetime import datetime
-
+from google.protobuf.timestamp_pb2 import Timestamp
 
 class UserService(user_service.UserServicer):
 
@@ -19,6 +19,7 @@ class UserService(user_service.UserServicer):
                     return user_messages.UserResponse( \
                                id = user.id, \
                                name = user.name, \
+                               birth = self.convertIntoTimestamp(user.birth), \
                                gender = user.gender.upper())
                 msg = 'User ID not found'
                 context.set_details(msg)
@@ -37,10 +38,19 @@ class UserService(user_service.UserServicer):
                         yield user_messages.UserResponse( \
                                id = user.id, \
                                name = user.name, \
+                               birth = self.convertIntoTimestamp(user.birth), \
                                gender = user.gender.upper())
             else:
                 for user in UserController().getUsers():
                     yield user_messages.UserResponse( \
                                id = user.id, \
                                name = user.name, \
+                               birth = self.convertIntoTimestamp(user.birth), \
                                gender = user.gender.upper())
+
+    def convertIntoTimestamp(self, old_date):
+        ts = Timestamp()
+        new_date = datetime.combine(old_date, datetime.min.time())
+        ts.FromDatetime(new_date)
+        return ts
+
