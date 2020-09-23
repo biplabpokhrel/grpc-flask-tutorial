@@ -6,8 +6,6 @@ Flask-MySQL==1.4.0
 Flask-RESTful==0.3.6
 Flask-SQLAlchemy==2.3.2
 itsdangerous==0.24
-Jinja2==2.9.6
-MarkupSafe==1.0
 marshmallow==2.15.1
 marshmallow-sqlalchemy==0.13.2
 PyMySQL==0.7.11
